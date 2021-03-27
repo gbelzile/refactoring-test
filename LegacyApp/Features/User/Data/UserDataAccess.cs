@@ -9,11 +9,13 @@ namespace LegacyApp
     {
         public static void AddUser(User user)
         {
+            user.ThrowIfNull(nameof(user));
+
             var connectionString = ConfigurationManager.ConnectionStrings["appDatabase"].ConnectionString;
 
             using (var connection = new SqlConnection(connectionString))
             {
-                var command = new SqlCommand
+                using var command = new SqlCommand
                 {
                     Connection = connection,
                     CommandType = CommandType.StoredProcedure,
